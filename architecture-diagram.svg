@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1020" viewBox="0 0 1440 1020" font-family="'Nunito Sans', 'Segoe UI', system-ui, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#555"/>
+    </marker>
+    <marker id="arrowD" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#999"/>
+    </marker>
+    <style>
+      .zone { font-size: 13px; font-weight: 800; letter-spacing: 2px; fill: #717171; }
+      .box { fill: #ffffff; stroke: #222222; stroke-width: 1.5; rx: 10; }
+      .boxT { font-size: 15px; font-weight: 800; fill: #222222; }
+      .boxS { font-size: 12.5px; fill: #717171; }
+      .lbl { font-size: 12px; fill: #717171; }
+      .note { font-size: 13px; fill: #555555; font-style: italic; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1440" height="1020" fill="#fafafa"/>
+  <text x="720" y="42" text-anchor="middle" font-size="24" font-weight="800" fill="#222222">Vacation-Rental Marketplace — Production Architecture</text>
+  <text x="720" y="66" text-anchor="middle" class="note">Scaling strategy: stateless services · read replicas · cache-aside · CDN-cached SSR · async events · geo-sharded search · multi-region active-active</text>
+
+  <!-- deploy arrow behind boxes -->
+  <line x1="555" y1="690" x2="555" y2="368" stroke="#bbbbbb" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#arrowD)"/>
+  <text x="565" y="530" class="lbl">deploys</text>
+
+  <!-- ZONE: clients -->
+  <text x="40" y="100" class="zone">CLIENTS</text>
+  <g>
+    <rect x="40" y="112" width="170" height="72" class="box" rx="10"/>
+    <text x="125" y="140" text-anchor="middle" class="boxT">Web App</text>
+    <text x="125" y="160" text-anchor="middle" class="boxS">React SPA</text>
+    <rect x="40" y="200" width="170" height="72" class="box" rx="10"/>
+    <text x="125" y="232" text-anchor="middle" class="boxT">iOS App</text>
+    <text x="125" y="252" text-anchor="middle" class="boxS">Swift / native</text>
+    <rect x="40" y="288" width="170" height="72" class="box" rx="10"/>
+    <text x="125" y="320" text-anchor="middle" class="boxT">Android App</text>
+    <text x="125" y="340" text-anchor="middle" class="boxS">Kotlin / native</text>
+  </g>
+
+  <!-- ZONE: edge -->
+  <text x="260" y="100" class="zone">EDGE</text>
+  <g>
+    <rect x="260" y="112" width="200" height="112" class="box" rx="10"/>
+    <text x="360" y="142" text-anchor="middle" class="boxT">CDN + WAF</text>
+    <text x="360" y="164" text-anchor="middle" class="boxS">caching · TLS · DDoS</text>
+    <text x="360" y="184" text-anchor="middle" class="boxS">p99 &lt; 300 ms</text>
+    <rect x="260" y="248" width="200" height="112" class="box" rx="10"/>
+    <text x="360" y="278" text-anchor="middle" class="boxT">Edge SSR</text>
+    <text x="360" y="300" text-anchor="middle" class="boxS">listing pages</text>
+    <text x="360" y="320" text-anchor="middle" class="boxS">ISR / stale-while-revalidate</text>
+  </g>
+
+  <!-- ZONE: gateway -->
+  <text x="510" y="100" class="zone">GATEWAY</text>
+  <g>
+    <rect x="510" y="112" width="180" height="248" class="box" rx="10"/>
+    <text x="600" y="160" text-anchor="middle" class="boxT">API Gateway</text>
+    <text x="600" y="186" text-anchor="middle" class="boxS">authentication</text>
+    <text x="600" y="208" text-anchor="middle" class="boxS">rate limiting</text>
+    <text x="600" y="230" text-anchor="middle" class="boxS">request routing</text>
+    <text x="600" y="252" text-anchor="middle" class="boxS">GraphQL / REST</text>
+    <text x="600" y="300" text-anchor="middle" class="boxS">OAuth2 · JWT</text>
+  </g>
+
+  <!-- ZONE: services -->
+  <text x="740" y="100" class="zone">MICROSERVICES (stateless, autoscaled)</text>
+  <g id="services">
+    <rect x="740" y="112" width="150" height="112" class="box" rx="10"/>
+    <text x="815" y="142" text-anchor="middle" class="boxT">Listings</text>
+    <text x="815" y="164" text-anchor="middle" class="boxS">CRUD · media</text>
+    <text x="815" y="184" text-anchor="middle" class="boxS">availability</text>
+    <rect x="910" y="112" width="150" height="112" class="box" rx="10"/>
+    <text x="985" y="142" text-anchor="middle" class="boxT">Search</text>
+    <text x="985" y="164" text-anchor="middle" class="boxS">geo · filters</text>
+    <text x="985" y="184" text-anchor="middle" class="boxS">ranking</text>
+    <rect x="1080" y="112" width="150" height="112" class="box" rx="10"/>
+    <text x="1155" y="142" text-anchor="middle" class="boxT">Bookings</text>
+    <text x="1155" y="164" text-anchor="middle" class="boxS">reservations</text>
+    <text x="1155" y="184" text-anchor="middle" class="boxS">calendar sync</text>
+    <rect x="1250" y="112" width="150" height="112" class="box" rx="10"/>
+    <text x="1325" y="142" text-anchor="middle" class="boxT">Payments</text>
+    <text x="1325" y="164" text-anchor="middle" class="boxS">payouts · fraud</text>
+    <text x="1325" y="184" text-anchor="middle" class="boxS">PCI vault</text>
+    <rect x="740" y="248" width="150" height="112" class="box" rx="10"/>
+    <text x="815" y="278" text-anchor="middle" class="boxT">Users</text>
+    <text x="815" y="300" text-anchor="middle" class="boxS">identity · KYC</text>
+    <text x="815" y="320" text-anchor="middle" class="boxS">profiles</text>
+    <rect x="910" y="248" width="150" height="112" class="box" rx="10"/>
+    <text x="985" y="278" text-anchor="middle" class="boxT">Messaging</text>
+    <text x="985" y="300" text-anchor="middle" class="boxS">host ↔ guest</text>
+    <text x="985" y="320" text-anchor="middle" class="boxS">websockets</text>
+    <rect x="1080" y="248" width="150" height="112" class="box" rx="10"/>
+    <text x="1155" y="278" text-anchor="middle" class="boxT">Reviews</text>
+    <text x="1155" y="300" text-anchor="middle" class="boxS">ratings</text>
+    <text x="1155" y="320" text-anchor="middle" class="boxS">moderation</text>
+    <rect x="1250" y="248" width="150" height="112" class="box" rx="10"/>
+    <text x="1325" y="278" text-anchor="middle" class="boxT">Notify</text>
+    <text x="1325" y="300" text-anchor="middle" class="boxS">email · push</text>
+    <text x="1325" y="320" text-anchor="middle" class="boxS">SMS</text>
+  </g>
+
+  <!-- arrows clients -> edge -> gateway -> services -->
+  <line x1="210" y1="148" x2="252" y2="148" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="210" y1="236" x2="252" y2="200" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="210" y1="324" x2="252" y2="280" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="460" y1="236" x2="502" y2="236" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="690" y1="168" x2="732" y2="168" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="690" y1="304" x2="732" y2="304" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="360" y1="224" x2="360" y2="240" stroke="#555" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ZONE: data -->
+  <text x="40" y="430" class="zone">DATA &amp; STORAGE</text>
+  <g>
+    <rect x="40" y="442" width="185" height="112" class="box" rx="10"/>
+    <text x="132" y="472" text-anchor="middle" class="boxT">PostgreSQL</text>
+    <text x="132" y="494" text-anchor="middle" class="boxS">primary · bookings,</text>
+    <text x="132" y="514" text-anchor="middle" class="boxS">users, listings</text>
+    <rect x="240" y="442" width="185" height="112" class="box" rx="10"/>
+    <text x="332" y="472" text-anchor="middle" class="boxT">Read replicas</text>
+    <text x="332" y="494" text-anchor="middle" class="boxS">listing reads</text>
+    <text x="332" y="514" text-anchor="middle" class="boxS">async replication</text>
+    <rect x="440" y="442" width="185" height="112" class="box" rx="10"/>
+    <text x="532" y="472" text-anchor="middle" class="boxT">Redis</text>
+    <text x="532" y="494" text-anchor="middle" class="boxS">cache-aside</text>
+    <text x="532" y="514" text-anchor="middle" class="boxS">sessions · rates</text>
+    <rect x="640" y="442" width="185" height="112" class="box" rx="10"/>
+    <text x="732" y="472" text-anchor="middle" class="boxT">S3 + CDN</text>
+    <text x="732" y="494" text-anchor="middle" class="boxS">43 photos/listing</text>
+    <text x="732" y="514" text-anchor="middle" class="boxS">resized variants</text>
+    <rect x="840" y="442" width="185" height="112" class="box" rx="10"/>
+    <text x="932" y="472" text-anchor="middle" class="boxT">Elasticsearch</text>
+    <text x="932" y="494" text-anchor="middle" class="boxS">geo-sharded index</text>
+    <text x="932" y="514" text-anchor="middle" class="boxS">facets · suggest</text>
+    <rect x="1040" y="442" width="185" height="112" class="box" rx="10"/>
+    <text x="1132" y="472" text-anchor="middle" class="boxT">Kafka</text>
+    <text x="1132" y="494" text-anchor="middle" class="boxS">booking events</text>
+    <text x="1132" y="514" text-anchor="middle" class="boxS">CDC → index</text>
+    <rect x="1240" y="442" width="160" height="112" class="box" rx="10"/>
+    <text x="1320" y="472" text-anchor="middle" class="boxT">Warehouse</text>
+    <text x="1320" y="494" text-anchor="middle" class="boxS">analytics</text>
+    <text x="1320" y="514" text-anchor="middle" class="boxS">pricing models</text>
+  </g>
+
+  <!-- data arrows -->
+  <line x1="815" y1="360" x2="200" y2="434" stroke="#999" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#arrowD)"/>
+  <text x="430" y="420" class="lbl">SQL</text>
+  <line x1="985" y1="360" x2="932" y2="434" stroke="#999" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#arrowD)"/>
+  <text x="995" y="410" class="lbl">index sync</text>
+  <line x1="1155" y1="360" x2="1132" y2="434" stroke="#999" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#arrowD)"/>
+  <text x="1145" y="410" class="lbl">events</text>
+  <line x1="800" y1="304" x2="720" y2="442" stroke="#999" stroke-width="1.5" stroke-dasharray="6 5" marker-end="url(#arrowD)"/>
+  <text x="700" y="400" class="lbl">media</text>
+
+  <!-- ZONE: platform -->
+  <text x="40" y="624" class="zone">DEPLOYMENT &amp; OPERATIONS</text>
+  <g>
+    <rect x="40" y="636" width="330" height="130" class="box" rx="10"/>
+    <text x="205" y="668" text-anchor="middle" class="boxT">CI / CD</text>
+    <text x="205" y="692" text-anchor="middle" class="boxS">GitHub Actions → ECR</text>
+    <text x="205" y="714" text-anchor="middle" class="boxS">lint · typecheck · visual</text>
+    <text x="205" y="736" text-anchor="middle" class="boxS">regression on PRs</text>
+    <rect x="390" y="636" width="330" height="130" class="box" rx="10"/>
+    <text x="555" y="668" text-anchor="middle" class="boxT">Kubernetes</text>
+    <text x="555" y="692" text-anchor="middle" class="boxS">multi-region EKS</text>
+    <text x="555" y="714" text-anchor="middle" class="boxS">HPA on CPU / RPS</text>
+    <text x="555" y="736" text-anchor="middle" class="boxS">active-active failover</text>
+    <rect x="740" y="636" width="330" height="130" class="box" rx="10"/>
+    <text x="905" y="668" text-anchor="middle" class="boxT">Observability</text>
+    <text x="905" y="692" text-anchor="middle" class="boxS">logs · metrics · traces</text>
+    <text x="905" y="714" text-anchor="middle" class="boxS">SLOs: avail, p99 latency</text>
+    <text x="905" y="736" text-anchor="middle" class="boxS">paging on burn-rate</text>
+    <rect x="1090" y="636" width="310" height="130" class="box" rx="10"/>
+    <text x="1245" y="668" text-anchor="middle" class="boxT">Config &amp; Flags</text>
+    <text x="1245" y="692" text-anchor="middle" class="boxS">feature flags</text>
+    <text x="1245" y="714" text-anchor="middle" class="boxS">secrets manager</text>
+    <text x="1245" y="736" text-anchor="middle" class="boxS">progressive rollout</text>
+  </g>
+
+  <!-- scaling notes -->
+  <text x="40" y="820" font-size="15" font-weight="800" fill="#222222">How it scales</text>
+  <text x="40" y="846" class="boxS" font-size="13.5">• Frontend: listing pages SSR at the edge with ISR — cache hits serve from CDN PoPs; dynamic pricing/hydration via API.</text>
+  <text x="40" y="870" class="boxS" font-size="13.5">• Backend: stateless microservices behind the gateway; HPA scales on RPS/CPU; bulkheads + circuit breakers per dependency.</text>
+  <text x="40" y="894" class="boxS" font-size="13.5">• Storage: Postgres primary for writes + read replicas for listing reads; Redis cache-aside for hot listings; S3 stores photo variants.</text>
+  <text x="40" y="918" class="boxS" font-size="13.5">• Search: Elasticsearch geo-sharded by region; Kafka CDC keeps the index fresh; ranking blends relevance, quality and conversion.</text>
+  <text x="40" y="942" class="boxS" font-size="13.5">• Deployment: containers → multi-region Kubernetes; CI runs lint, typecheck and visual regression; flags enable progressive rollout; SLO-based paging.</text>
+  <text x="40" y="992" class="lbl">Drawn from scratch for the take-home submission · not affiliated with Airbnb, Inc.</text>
+</svg>

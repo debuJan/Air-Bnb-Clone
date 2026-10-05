@@ -1,0 +1,64 @@
+# Agent roles used in this build (machine-readable)
+
+version: 1
+project: airbnb-listing-clone
+stack: vite + react + tailwindcss
+
+shared_contracts:
+  data_module: src/data/listing.js        # LISTING, CATEGORIES, PHOTOS, HERO, reviews, amenities, stays
+  icons: src/components/icons.jsx          # <Icon name size className />
+  router: src/App.jsx                      # exports navigate(); ?modal=PHOTO_TOUR_SCROLLABLE[&modalItem=1000+N]
+  theme: tailwind.config.js                # brand #FF385C, ink #222222, secondary #717171, hairline #DDDDDD, fill #F7F7F7
+  originality: All code and copy written from scratch; reference source never fetched.
+
+agents:
+  - id: build-coordinator
+    role: Plan, define shared contracts, scaffold project, build data/icons/router,
+      produce architecture diagram + workflow docs, run final QA and packaging.
+    inputs: [task description, reference screenshots, UI spec]
+    outputs: [project scaffold, architecture-diagram.svg/pdf, workflow/, submission zip]
+
+  - id: listing-part-1
+    role: Build listing page upper sections.
+    files:
+      - src/components/Header.jsx
+      - src/components/SectionNav.jsx        # sticky scrollspy: Photos/Amenities/Reviews/Location
+      - src/components/TitleRow.jsx
+      - src/components/HeroGallery.jsx       # 5-photo mosaic, "Show all photos"
+      - src/components/ListingInfo.jsx       # subtitle, guest-favourite band, host row, highlights, description expander
+      - src/components/WhereToSleep.jsx
+      - src/components/Amenities.jsx         # 2-col list, struck-through alarms, "Show all 50 amenities"
+    quality_bar: exact copy, hover states, keyboard operability, aria labels
+
+  - id: listing-part-2
+    role: Build listing page lower sections.
+    files:
+      - src/components/Availability.jsx      # Oct–Nov 2026 range calendar, default 18–23 Oct
+      - src/components/BookingCard.jsx       # sticky card: coupon, price, dates, guests, Reserve
+      - src/components/Reviews.jsx           # 4.95 summary, bars, 7 category scores, chips, 6 cards
+      - src/components/Location.jsx          # stylized SVG map, pin, zoom controls, neighbourhood
+      - src/components/HostCard.jsx          # Mirashya Homes profile, stats, message host
+      - src/components/ThingsToKnow.jsx      # 3-column grid
+      - src/components/NearbyStays.jsx       # carousel, 5 per page, 1/2 pagination
+    quality_bar: pixel-close layout, working interactions, no emojis, ₹ formatting
+
+  - id: shell-modals
+    role: Assemble page and build overlay views.
+    files:
+      - src/components/ListingPage.jsx       # composes part-1 + part-2, 2-col grid, ends after carousel, NO footer
+      - src/components/PhotoTour.jsx        # ?modal=PHOTO_TOUR_SCROLLABLE; category nav, sticky headers
+      - src/components/Lightbox.jsx          # ?modalItem=1000+N; ←/→/Esc keyboard, circular chevron buttons
+    quality_bar: URL-driven views, focus management, Esc handling, body scroll lock
+
+  - id: photo-verify
+    role: Verify every hotlinked Unsplash URL with curl; replace non-200 responses
+      with verified same-subject alternatives in place.
+    inputs: [src/data/listing.js]
+    outputs: [patched src/data/listing.js, verification report]
+    result: 44 checked, 4 replaced, 43 photos + 5 hero confirmed
+
+  - id: qa-screenshots
+    role: npm run build, serve dist, screenshot with headless Chromium at 1440x900
+      (listing, photo tour, lightbox), compare against reference screenshots,
+      fix fidelity gaps, re-verify until close.
+    gates: [build passes, no console errors, keyboard walkthrough, screenshot diff review]

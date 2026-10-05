@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: #222222;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 200;
+  background: #222222;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 0 0 8px 0;
+  font-weight: 700;
+  font-size: 14px;
+}
+.skip-link:focus-visible {
+  left: 0;
+}
+
+:focus-visible {
+  outline: 2px solid #222222;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Airbnb-like Reserve button gradient sheen */
+.reserve-btn {
+  background: #ff385c;
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+.reserve-btn:hover {
+  background: #e11d48;
+}
+.reserve-btn:active {
+  transform: scale(0.98);
+}
+
+/* Hide scrollbars for chip rails */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Fade-in for photo tour modal */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-up {
+  animation: fadeUp 320ms ease both;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fade-in {
+  animation: fadeIn 200ms ease both;
+}
